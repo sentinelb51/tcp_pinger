@@ -11,17 +11,7 @@ def ip_is_valid(address: str) -> bool:
     else:
         return True
 
-
-def port_is_valid(port: int) -> bool:
-    try:
-        getservbyport(port)
-    except (OverflowError, OSError, ValueError):
-        return False
-    else:
-        return True
-
-
-def try_connect(ip_address, port) -> None:
+def try_connect(ip_address: str, port: int) -> None:
     tcp_socket = socket(AF_INET, SOCK_STREAM)
     tcp_socket.settimeout(0.5)
     # Re-creating a socket every time is expensive but it's to avoid WinError-10053
@@ -54,8 +44,8 @@ def main():
         raise TypeError("Port provided is not an integer")
 
     port = int(port)
-    if not port_is_valid(port):
-        raise TypeError("Invalid or illegal port provided")
+    if not 0 < port <= 65535:
+        raise ValueError("Port range is out of boundaries")
 
     try:
         for _ in range(8):
