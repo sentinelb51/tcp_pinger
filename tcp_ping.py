@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from ipaddress import ip_address
 from signal import signal, SIGINT
-from socket import socket, AF_INET, SOCK_STREAM, timeout, SHUT_RD
+from socket import socket, AF_INET, SOCK_STREAM, timeout, SHUT_RD, IPPROTO_TCP, TCP_NODELAY
 from time import time_ns, sleep
 
 parser = ArgumentParser()
@@ -66,6 +66,7 @@ def main():
     for sequence in range(1, args.n + 1):
         tcp_socket = socket(AF_INET, SOCK_STREAM)
         tcp_socket.settimeout(TIMEOUT)
+        tcp_socket.setsockopt(IPPROTO_TCP, TCP_NODELAY, 1)
         sleep(WAIT)
 
         t1 = time_ns()
